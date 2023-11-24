@@ -17,7 +17,7 @@ class CountryMasterController extends Controller
             return $query->where('Name', 'like', '%' . $Search . '%')
                    ->orwhere('ShortName', 'like', '%' . $Search . '%');
         })->when($Status, function ($query) use ($Status) {
-             return $query->where('Status', 'like', '%' . $Status . '%');
+             return $query->where('Status',$Status);
         })->select('*')->get('*');
 
         if ($posts->isNotEmpty()) {
@@ -73,7 +73,7 @@ class CountryMasterController extends Controller
                 $edit = CountryMaster::find($id);
     
                 $businessvalidation =array(
-                    'Name' => 'required',
+                    'Name' => 'required|unique:'._PGSQL_.'.'._COUNTRY_MASTER_.',Name',
                     'ShortName' => 'required'
                 );
                  

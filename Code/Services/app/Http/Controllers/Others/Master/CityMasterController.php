@@ -14,22 +14,39 @@ class CityMasterController extends Controller
       $Status = $request->input('Status');
 
     $posts = CityMaster::when($Search, function ($query) use ($Search) {
-        return $query->where('Name', 'like', '%' . $Search . '%')
-                     ->orwhere('CountryId', 'like', '%' . $Search . '%')
-                     ->orwhere('StateId', 'like', '%' . $Search . '%');
+        return $query->where('Name', 'like', '%' . $Search . '%');
     })->when($Status, function ($query) use ($Status) {
-         return $query->where('Status', 'like', '%' . $Status . '%');
+         return $query->where('Status',$Status);
     })->select('*')->get('*');
 
     if ($posts->isNotEmpty()) {
+        $arrayDataRows = [];
+        foreach ($posts as $post){
+            $arrayDataRows[] = [
+                "Id" => $post->id,
+                "Name" => $post->Name,
+                "StateName" => getName(_STATE_MASTER_,$post->StateId),
+                "CountryName" => getName(_COUNTRY_MASTER_,$post->CountryId),
+                "Status" => $post->Status,
+                "AddedBy" => $post->AddedBy,
+                "UpdatedBy" => $post->UpdatedBy,
+                "created_at" => $post->created_at,
+                "updated_at" => $post->updated_at
+            ];
+        }
+
         return response()->json([
-            'Status' => 200,
+            'Status' => 0,
             'message' => '',
             'TotalRecord' => $posts->count('id'),
-            'DataList' => $posts
+            'DataList' => $arrayDataRows
         ]);
     } else {
-        return response()->json(['message' => 'Data not found'], 404);
+        return response()->json([
+            "Status" => 0,
+            "TotalRecord" => $posts->count('id'), 
+            "Message" => "No Record Found."
+        ]);
     }
 }
 
@@ -39,7 +56,7 @@ class CityMasterController extends Controller
           $val = $request->input('id');
           if ($val === null) {
              $businessvalidation =array(
-                'Name' => 'required',
+                'Name' => 'required|unique:'._PGSQL_.'.'._CITY_MASTER_.',Name',
                 'CountryId' => 'required',
                 'StateId' => 'required',
                 'AddedBy' => 'required',
@@ -59,7 +76,7 @@ class CityMasterController extends Controller
                 'AddedBy' => $request->AddedBy,   
                 'UpdatedBy' => $request->UpdatedBy,   
                 'Status' => $request->Status,
-                'Date_added' => now(),
+                'created_at' => now(),
              ]);
              if ($brand) {
                 return response()->json(['result' =>'Data added successfully!']);
@@ -80,7 +97,7 @@ class CityMasterController extends Controller
                     $edit->AddedBy = $request->input('AddedBy');
                     $edit->UpdatedBy = $request->input('UpdatedBy');
                     $edit->Status = $request->input('Status');
-                    $edit->Updated_at = now();
+                    $edit->updated_at = now();
                     $edit->save();
             
                     return response()->json(['result' => 'Data updated successfully']);

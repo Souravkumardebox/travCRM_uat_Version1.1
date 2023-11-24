@@ -7,53 +7,59 @@ use App\Http\Controllers\Controller;
 use App\Models\Others\Master\StateMaster;
 use Illuminate\Support\Facades\Validator;
 
+
 class StateMasterController extends Controller
 {
-
+   
     public function index(Request $request){
+       
+         
+        $arrayDataRows = array();
+
         call_logger('REQUEST COMES FROM STATE LIST: '.$request->getContent());
+        
         $Search = $request->input('Search');
         $Status = $request->input('Status');
-
-        $posts = StateMaster::when($Search, function ($query) use ($Search) {
-            return $query->where('Name', 'like', '%' . $Search . '%')
-                   ->orwhere('CountryId', 'like', '%' . $Search . '%');
-        })->when($Status, function ($query) use ($Status) {
-             return $query->where('Status', 'like', '%' . $Status . '%');
-        })->select('*')->get('*');
-
-        $countryName = getValue(_COUNTRY_MASTER_,3,"Name");
         
-        call_logger('REQUEST2: '.$countryName);
+        $posts = StateMaster::when($Search, function ($query) use ($Search) {
+            return $query->where('Name', 'like', '%' . $Search . '%');
+        })->when($Status, function ($query) use ($Status) {
+             return $query->where('Status',$Status);
+        })->select('*')->get('*');
+ 
+        //$countryName = getName(_COUNTRY_MASTER_,3);
+        //$countryName22 = getColumnValue(_COUNTRY_MASTER_,'ShortName','AU','Name');
+        //call_logger('REQUEST2: '.$countryName22);
 
         if ($posts->isNotEmpty()) {
+            $arrayDataRows = [];
+            foreach ($posts as $post){
+                $arrayDataRows[] = [
+                    "Id" => $post->id,
+                    "Name" => $post->Name,
+                    "CountryId" => $post->CountryId,
+                    "CountryName" => getName(_COUNTRY_MASTER_,$post->CountryId),
+                    "Status" => $post->Status,
+                    "AddedBy" => $post->AddedBy,
+                    "UpdatedBy" => $post->UpdatedBy,
+                    "created_at" => $post->created_at,
+                    "updated_at" => $post->updated_at
+                ];
+            }
+            
             return response()->json([
                 'Status' => 200,
                 'TotalRecord' => $posts->count('id'),
-                'DataList' => $posts
+                'DataList' => $arrayDataRows
             ]);
-        } else {
+        
+        }else {
             return response()->json([
                 "Status" => 0,
                 "TotalRecord" => $posts->count('id'), 
                 "Message" => "No Record Found."
             ]);
         }
-        /*$dataList = StateMaster::orderBy('Name','ASC')->get();
-        $totalRecord = count($statelist);
-        if($totalRecord>0){
-            return response()->json([
-                "Status" => 0, 
-                "TotalRecord" => $totalRecord, 
-                "DataList" => $dataList
-            ]);
-        }else{
-            return response()->json([
-                "Status" => 0,
-                "TotalRecord" => $totalRecord, 
-                "Message" => "No Record Found."
-            ]);
-        }*/
     }
 
     public function store(Request $request)
@@ -79,7 +85,7 @@ class StateMasterController extends Controller
                     'CountryId' => $request->CountryId,
                     'Status' => $request->Status,
                     'AddedBy' => $request->AddedBy, 
-                    'DateAdded' => now(),
+                    'created_at' => now(),
                 ]);
 
                 if ($savedata) {
@@ -109,7 +115,7 @@ class StateMasterController extends Controller
                         $edit->CountryId = $request->input('CountryId');
                         $edit->Status = $request->input('Status');
                         $edit->UpdatedBy = $request->input('UpdatedBy');
-                        $edit->DateUpdated = now();
+                        $edit->updated_at = now();
                         $edit->save();
                         
                         return response()->json(['Status' => 0, 'Message' => 'Data updated successfully']);
