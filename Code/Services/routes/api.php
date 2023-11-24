@@ -21,13 +21,13 @@ Route::post('/citylist',[CityMasterController::class,'index']);
 Route::post('/addupdatecity',[CityMasterController::class,'save']);
 
 Route::post('/destinationlist',[DestinationMasterController::class,'index']);
-Route::post('/addupdatedestination',[DestinationMasterController::class,'save']);
+Route::post('/addupdatedestination',[DestinationMasterController::class,'store']);
 
 Route::post('/businesslist',[BusinessTypeMasterController::class,'index']);
-Route::post('/addupdatebusiness',[BusinessTypeMasterController::class,'save']);
+Route::post('/addupdatebusiness',[BusinessTypeMasterController::class,'store']);
 
 Route::post('/languagelist',[LanguageMasterController::class,'index']);
-Route::post('/addupdatelanguage',[LanguageMasterController::class,'save']);
+Route::post('/addupdatelanguage',[LanguageMasterController::class,'store']);
 
 Route::post('/querylist',[QueryMasterController::class,'index']);
 Route::post('/addupdatequery',[QueryMasterController::class,'save']);
