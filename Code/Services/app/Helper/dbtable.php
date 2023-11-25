@@ -11,6 +11,8 @@ define("_CITY_MASTER_", "master.city_master");
 define("_DESTINATION_MASTER_", "master.destination_master");
 define("_LANGUAGE_MASTER_", "master.language_master");
 define("_BUSINESS_TYPE_MASTER_", "master.business_type_master");
+define("_Division_Master_", "master.division_master");
+define("_Lead_Source_Master_", "master.lead_source_master");
 
 ///////////////////////////////////////////////////////////////
 

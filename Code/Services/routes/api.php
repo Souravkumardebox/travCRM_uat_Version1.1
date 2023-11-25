@@ -9,6 +9,8 @@ use App\Http\Controllers\Others\Master\StateMasterController;
 use App\Http\Controllers\Others\Master\CityMasterController;
 use App\Http\Controllers\Others\Master\DestinationMasterController;
 use App\Http\Controllers\Others\Master\LanguageMasterController;
+use App\Http\Controllers\Others\Master\DivisionMasterController;
+use App\Http\Controllers\Others\Master\LeadSourceMasterController;
 
 Route::post('/countrylist',[CountryMasterController::class,'index']);
 Route::post('/addupdatecountry',[CountryMasterController::class,'store']);
@@ -31,6 +33,12 @@ Route::post('/addupdatelanguage',[LanguageMasterController::class,'store']);
 
 Route::post('/querylist',[QueryMasterController::class,'index']);
 Route::post('/addupdatequery',[QueryMasterController::class,'save']);
+
+Route::post('/divisionlist',[DivisionMasterController::class,'index']);
+Route::post('/addupdatedivision',[DivisionMasterController::class,'store']);
+
+Route::post('/leadlist',[LeadSourceMasterController::class,'index']);
+Route::post('/addupdatelead',[LeadSourceMasterController::class,'store']);
 
 Route::post('/users-api',[ExampleController::class,'apidata']);
 
