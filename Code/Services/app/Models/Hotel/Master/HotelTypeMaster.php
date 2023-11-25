@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class HotelTypeMaster extends Model
 {
     use HasFactory;
-    protected $table = _Hotel_Type_Master_;
+    protected $table = _HOTEL_TYPE_MASTER_;
     protected $primarykey = 'id'; 
     protected $fillable = [
         'Name',

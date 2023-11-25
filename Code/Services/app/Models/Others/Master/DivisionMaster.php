@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class DivisionMaster extends Model
 {
     use HasFactory;
-    protected $table = _Division_Master_;
+    protected $table = _DIVISION_MASTER_;
     protected $primarykey = "id";
     protected $fillable = [
      'Name',

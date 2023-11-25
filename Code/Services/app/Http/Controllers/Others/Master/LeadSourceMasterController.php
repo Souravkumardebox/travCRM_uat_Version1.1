@@ -69,7 +69,7 @@ class LeadSourceMasterController extends Controller
             if($id == '') {
                  
                 $businessvalidation =array(
-                    'Name' => 'required|unique:'._PGSQL_.'.'._Lead_Source_Master_.',Name',
+                    'Name' => 'required|unique:'._PGSQL_.'.'._LEAD_SOURCE_MASTER_.',Name',
                     'SetDefault' => 'required'
                 );
                  

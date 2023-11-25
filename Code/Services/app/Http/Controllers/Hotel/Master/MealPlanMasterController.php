@@ -71,7 +71,7 @@ class MealPlanMasterController extends Controller
             if($id == '') {
                  
                 $businessvalidation =array(
-                    'Name' => 'required|unique:'._PGSQL_.'.'._Meal_Plan_Master_.',Name',
+                    'Name' => 'required|unique:'._PGSQL_.'.'._MEAL_PLAN_MASTER_.',Name',
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation); 

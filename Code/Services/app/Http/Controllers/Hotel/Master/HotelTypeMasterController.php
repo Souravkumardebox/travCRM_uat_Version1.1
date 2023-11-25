@@ -69,7 +69,7 @@ class HotelTypeMasterController extends Controller
             if($id == '') {
                  
                 $businessvalidation =array(
-                    'Name' => 'required|unique:'._PGSQL_.'.'._Hotel_Type_Master_.',Name',
+                    'Name' => 'required|unique:'._PGSQL_.'.'._HOTEL_TYPE_MASTER_.',Name',
                     'UploadKeyword' =>'required',
                 );
                  

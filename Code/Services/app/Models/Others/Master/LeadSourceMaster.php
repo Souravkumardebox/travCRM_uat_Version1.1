@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class LeadSourceMaster extends Model
 {
     use HasFactory;
-    protected $table = _Lead_Source_Master_;
+    protected $table = _LEAD_SOURCE_MASTER_;
     protected $primarykey = "id";
     protected $fillable = [
      'Name',
