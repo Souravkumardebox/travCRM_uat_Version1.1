@@ -11,8 +11,17 @@ define("_CITY_MASTER_", "master.city_master");
 define("_DESTINATION_MASTER_", "master.destination_master");
 define("_LANGUAGE_MASTER_", "master.language_master");
 define("_BUSINESS_TYPE_MASTER_", "master.business_type_master");
-define("_Division_Master_", "master.division_master");
-define("_Lead_Source_Master_", "master.lead_source_master");
+define("_Division_Master_", "master.Division_Master");
+define("_Lead_Source_Master_", "master.Lead_Source_Master");
+
+
+
+define("_Hotel_Type_Master_", "master.Hotel_Type_Master");
+define("_Hotel_Category_Master_", "master.Hotel_Category_Master");
+define("_Meal_Plan_Master_", "master.Meal_Plan_Master");
+define("_Amenities_Master_", "master.Amenities_Master");
+
+
 
 ///////////////////////////////////////////////////////////////
 

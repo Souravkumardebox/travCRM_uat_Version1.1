@@ -12,6 +12,11 @@ use App\Http\Controllers\Others\Master\LanguageMasterController;
 use App\Http\Controllers\Others\Master\DivisionMasterController;
 use App\Http\Controllers\Others\Master\LeadSourceMasterController;
 
+use App\Http\Controllers\Hotel\Master\HotelTypeMasterController;
+use App\Http\Controllers\Hotel\Master\HotelCategoryMasterController;
+use App\Http\Controllers\Hotel\Master\MealPlanMasterController;
+use App\Http\Controllers\Hotel\Master\AmenitiesMasterController;
+
 Route::post('/countrylist',[CountryMasterController::class,'index']);
 Route::post('/addupdatecountry',[CountryMasterController::class,'store']);
 
@@ -42,3 +47,16 @@ Route::post('/addupdatelead',[LeadSourceMasterController::class,'store']);
 
 Route::post('/users-api',[ExampleController::class,'apidata']);
 
+// ========================Hotel API ROUTE========================
+
+Route::post('/hoteltypelist',[HotelTypeMasterController::class,'index']);
+Route::post('/addupdatehoteltype',[HotelTypeMasterController::class,'store']);
+
+Route::post('/hotelcategorylist',[HotelCategoryMasterController::class,'index']);
+Route::post('/addupdatehotelcategory',[HotelCategoryMasterController::class,'store']);
+
+Route::post('/meallist',[MealPlanMasterController::class,'index']);
+Route::post('/addupdatemeal',[MealPlanMasterController::class,'store']);
+
+Route::post('/amenitieslist',[AmenitiesMasterController::class,'index']);
+Route::post('/addupdateamenities',[AmenitiesMasterController::class,'store']);

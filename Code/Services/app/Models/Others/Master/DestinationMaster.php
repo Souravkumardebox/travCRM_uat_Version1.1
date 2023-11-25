@@ -19,6 +19,8 @@ class DestinationMaster extends Model
      'AddedBy',
      'UpdatedBy',
      'Status',
+     'created_at',
+     'updated_at',
     ];
     public $timestamps = false;
 }
