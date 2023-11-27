@@ -16,6 +16,10 @@ use App\Http\Controllers\Hotel\Master\HotelTypeMasterController;
 use App\Http\Controllers\Hotel\Master\HotelCategoryMasterController;
 use App\Http\Controllers\Hotel\Master\MealPlanMasterController;
 use App\Http\Controllers\Hotel\Master\AmenitiesMasterController;
+use App\Http\Controllers\Hotel\Master\TourTypeMasterController;
+use App\Http\Controllers\Hotel\Master\SeasonMasterController;
+use App\Http\Controllers\Hotel\Master\RestaurantMealPlanMasterController;
+use App\Http\Controllers\Hotel\Master\HotelAdditionalMasterController;
 
 Route::post('/countrylist',[CountryMasterController::class,'index']);
 Route::post('/addupdatecountry',[CountryMasterController::class,'store']);
@@ -60,3 +64,15 @@ Route::post('/addupdatemeal',[MealPlanMasterController::class,'store']);
 
 Route::post('/amenitieslist',[AmenitiesMasterController::class,'index']);
 Route::post('/addupdateamenities',[AmenitiesMasterController::class,'store']);
+
+Route::post('/tourlist',[TourTypeMasterController::class,'index']);
+Route::post('/addupdatetour',[TourTypeMasterController::class,'store']);
+
+Route::post('/seasonlist',[SeasonMasterController::class,'index']);
+Route::post('/addupdateseason',[SeasonMasterController::class,'store']);
+
+Route::post('/restaurantlist',[RestaurantMealPlanMasterController::class,'index']);
+Route::post('/addupdaterestaurant',[RestaurantMealPlanMasterController::class,'store']);
+
+Route::post('/hotellist',[HotelAdditionalMasterController::class,'index']);
+Route::post('/addupdatehotel',[HotelAdditionalMasterController::class,'store']);
