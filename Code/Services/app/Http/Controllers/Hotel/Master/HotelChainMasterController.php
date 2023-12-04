@@ -1,39 +1,43 @@
 <?php
 
-namespace App\Http\Controllers\Hotel\master;
+namespace App\Http\Controllers\Hotel\Master;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Hotel\Master\RestaurantMealPlanMaster;
-class RestaurantMealPlanMasterController extends Controller
+use App\Models\Hotel\Master\HotelChainMaster;
+
+class HotelChainMasterController extends Controller
 {
     public function index(Request $request){
        
          
         $arrayDataRows = array();
-  
-        call_logger('REQUEST COMES FROM STATE LIST: '.$request->getContent());
-        
+   
         $Search = $request->input('Search');
         $Status = $request->input('Status');
         
-        $posts = RestaurantMealPlanMaster::when($Search, function ($query) use ($Search) {
+        $posts = HotelChainMaster::when($Search, function ($query) use ($Search) {
             return $query->where('Name', 'like', '%' . $Search . '%');
         })->when($Status, function ($query) use ($Status) {
              return $query->where('Status',$Status);
         })->select('*')->get('*');
-  
-        //$countryName = getName(_COUNTRY_MASTER_,3);
-        //$countryName22 = getColumnValue(_COUNTRY_MASTER_,'ShortName','AU','Name');
-        //call_logger('REQUEST2: '.$countryName22);
-  
+   
         if ($posts->isNotEmpty()) {
             $arrayDataRows = [];
             foreach ($posts as $post){
                 $arrayDataRows[] = [
                     "Id" => $post->id,
                     "Name" => $post->Name,
+                    "Location" => $post->Location,
+                    "HotelWebsite" => $post->HotelWebsite,
+                    "SelfSupplier" => $post->SelfSupplier,
+                    "ContactType" => $post->ContactType,
+                    "ContactName" => $post->ContactName,
+                    "ContactDesignation" => $post->ContactDesignation,
+                    "ContactCountryCode" => $post->ContactCountryCode,
+                    "ContactMobile" => $post->ContactMobile,
+                    "ContactEmail" => $post->ContactEmail,
                     "Status" => $post->Status,
                     "AddedBy" => $post->AddedBy,
                     "UpdatedBy" => $post->UpdatedBy,
@@ -64,7 +68,7 @@ class RestaurantMealPlanMasterController extends Controller
             if($id == '') {
                  
                 $businessvalidation =array(
-                    'Name' => 'required|unique:'._DB_.'.'._RESTAURANT_MEAL_PLAN_MASTER_.',Name',
+                    'Name' => 'required|unique:'._DB_.'.'._HOTEL_CHAIN_MASTER_.',Name',
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation); 
@@ -72,8 +76,17 @@ class RestaurantMealPlanMasterController extends Controller
                 if($validatordata->fails()){
                     return $validatordata->errors();
                 }else{
-                 $savedata = RestaurantMealPlanMaster::create([
+                 $savedata = HotelChainMaster::create([
                     'Name' => $request->Name,
+                    'Location' => $request->Location,
+                    'HotelWebsite' => $request->HotelWebsite,
+                    'SelfSupplier' => $request->SelfSupplier,
+                    'ContactType' => $request->ContactType,
+                    'ContactName' => $request->ContactName,
+                    'ContactDesignation' => $request->ContactDesignation,
+                    'ContactCountryCode' => $request->ContactCountryCode,
+                    'ContactMobile' => $request->ContactMobile,
+                    'ContactEmail' => $request->ContactEmail,
                     'Status' => $request->Status,
                     'AddedBy' => $request->AddedBy, 
                     'created_at' => now(),
@@ -89,7 +102,7 @@ class RestaurantMealPlanMasterController extends Controller
             }else{
     
                 $id = $request->input('id');
-                $edit = RestaurantMealPlanMaster::find($id);
+                $edit = HotelChainMaster::find($id);
     
                 $businessvalidation =array(
                     'Name' => 'required',
@@ -102,6 +115,15 @@ class RestaurantMealPlanMasterController extends Controller
                 }else{
                     if ($edit) {
                         $edit->Name = $request->input('Name');
+                        $edit->Location = $request->input('Location');
+                        $edit->HotelWebsite = $request->input('HotelWebsite');
+                        $edit->SelfSupplier = $request->input('SelfSupplier');
+                        $edit->ContactType = $request->input('ContactType');
+                        $edit->ContactName = $request->input('ContactName');
+                        $edit->ContactDesignation = $request->input('ContactDesignation');
+                        $edit->ContactCountryCode = $request->input('ContactCountryCode');
+                        $edit->ContactMobile = $request->input('ContactMobile');
+                        $edit->ContactEmail = $request->input('ContactEmail');
                         $edit->Status = $request->input('Status');
                         $edit->UpdatedBy = $request->input('UpdatedBy');
                         $edit->updated_at = now();
@@ -123,7 +145,7 @@ class RestaurantMealPlanMasterController extends Controller
      
     public function destroy(Request $request)
     {
-        $brands = RestaurantMealPlanMaster::find($request->id);
+        $brands = HotelChainMaster::find($request->id);
         $brands->delete();
   
         if ($brands) {

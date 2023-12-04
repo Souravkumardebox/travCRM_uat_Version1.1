@@ -64,14 +64,14 @@ class SeasonMasterController extends Controller
   
     public function store(Request $request)
     {
-        call_logger('REQUEST COMES FROM ADD/UPDATE STATE: '.$request->getContent());
+        call_logger('REQUEST COMES FROM ADD/UPDATE SEASON: '.$request->getContent());
         
         try{
             $id = $request->input('id');
             if($id == '') {
                  
                 $businessvalidation =array(
-                    'Name' => 'required|unique:'._PGSQL_.'.'._SEASOM_MASTER_.',Name',
+                    'Name' => 'required|unique:'._DB_.'.'._SEASOM_MASTER_.',Name',
                     'FromDate' =>'required',
                     'ToDate ' =>'required',
                 );

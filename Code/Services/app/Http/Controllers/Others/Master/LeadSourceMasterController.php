@@ -14,7 +14,7 @@ class LeadSourceMasterController extends Controller
          
         $arrayDataRows = array();
 
-        call_logger('REQUEST COMES FROM STATE LIST: '.$request->getContent());
+        call_logger('REQUEST COMES FROM LEAD SOURCE: '.$request->getContent());
         
         $Search = $request->input('Search');
         $Status = $request->input('Status');
@@ -26,10 +26,7 @@ class LeadSourceMasterController extends Controller
              return $query->where('Status',$Status);
         })->select('*')->get('*');
  
-        //$countryName = getName(_COUNTRY_MASTER_,3);
-        //$countryName22 = getColumnValue(_COUNTRY_MASTER_,'ShortName','AU','Name');
-        //call_logger('REQUEST2: '.$countryName22);
-
+         
         if ($posts->isNotEmpty()) {
             $arrayDataRows = [];
             foreach ($posts as $post){
@@ -62,14 +59,14 @@ class LeadSourceMasterController extends Controller
 
     public function store(Request $request)
     {
-        call_logger('REQUEST COMES FROM ADD/UPDATE STATE: '.$request->getContent());
+        call_logger('REQUEST COMES FROM ADD/UPDATE LEAD: '.$request->getContent());
         
         try{
             $id = $request->input('id');
             if($id == '') {
                  
                 $businessvalidation =array(
-                    'Name' => 'required|unique:'._PGSQL_.'.'._LEAD_SOURCE_MASTER_.',Name',
+                    'Name' => 'required|unique:'._DB_.'.'._LEAD_SOURCE_MASTER_.',Name',
                     'SetDefault' => 'required'
                 );
                  

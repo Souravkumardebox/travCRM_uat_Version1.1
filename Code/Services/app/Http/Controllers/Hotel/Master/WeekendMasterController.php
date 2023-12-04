@@ -1,24 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\Hotel\master;
+namespace App\Http\Controllers\Hotel\Master;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Hotel\Master\RestaurantMealPlanMaster;
-class RestaurantMealPlanMasterController extends Controller
+use App\Models\Hotel\Master\WeekendMaster;
+
+class WeekendMasterController extends Controller
 {
     public function index(Request $request){
        
          
         $arrayDataRows = array();
-  
-        call_logger('REQUEST COMES FROM STATE LIST: '.$request->getContent());
         
         $Search = $request->input('Search');
         $Status = $request->input('Status');
         
-        $posts = RestaurantMealPlanMaster::when($Search, function ($query) use ($Search) {
+        $posts = WeekendMaster::when($Search, function ($query) use ($Search) {
             return $query->where('Name', 'like', '%' . $Search . '%');
         })->when($Status, function ($query) use ($Status) {
              return $query->where('Status',$Status);
@@ -34,6 +33,7 @@ class RestaurantMealPlanMasterController extends Controller
                 $arrayDataRows[] = [
                     "Id" => $post->id,
                     "Name" => $post->Name,
+                    "WeekendDays" => $post->WeekendDays,
                     "Status" => $post->Status,
                     "AddedBy" => $post->AddedBy,
                     "UpdatedBy" => $post->UpdatedBy,
@@ -59,12 +59,13 @@ class RestaurantMealPlanMasterController extends Controller
   
     public function store(Request $request)
     {
+        
         try{
             $id = $request->input('id');
             if($id == '') {
                  
                 $businessvalidation =array(
-                    'Name' => 'required|unique:'._DB_.'.'._RESTAURANT_MEAL_PLAN_MASTER_.',Name',
+                    'Name' => 'required|unique:'._DB_.'.'._WEEKEND_MASTER_.',Name',
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation); 
@@ -72,8 +73,9 @@ class RestaurantMealPlanMasterController extends Controller
                 if($validatordata->fails()){
                     return $validatordata->errors();
                 }else{
-                 $savedata = RestaurantMealPlanMaster::create([
+                 $savedata = WeekendMaster::create([
                     'Name' => $request->Name,
+                    'WeekendDays' => $request->WeekendDays,
                     'Status' => $request->Status,
                     'AddedBy' => $request->AddedBy, 
                     'created_at' => now(),
@@ -89,7 +91,7 @@ class RestaurantMealPlanMasterController extends Controller
             }else{
     
                 $id = $request->input('id');
-                $edit = RestaurantMealPlanMaster::find($id);
+                $edit = WeekendMaster::find($id);
     
                 $businessvalidation =array(
                     'Name' => 'required',
@@ -102,6 +104,7 @@ class RestaurantMealPlanMasterController extends Controller
                 }else{
                     if ($edit) {
                         $edit->Name = $request->input('Name');
+                        $edit->WeekendDays = $request->input('WeekendDays');
                         $edit->Status = $request->input('Status');
                         $edit->UpdatedBy = $request->input('UpdatedBy');
                         $edit->updated_at = now();
@@ -123,7 +126,7 @@ class RestaurantMealPlanMasterController extends Controller
      
     public function destroy(Request $request)
     {
-        $brands = RestaurantMealPlanMaster::find($request->id);
+        $brands = WeekendMaster::find($request->id);
         $brands->delete();
   
         if ($brands) {
