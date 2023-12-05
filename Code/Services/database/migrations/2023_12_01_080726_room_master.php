@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class StateMaster extends Migration
+class RoomMaster extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class StateMaster extends Migration
      */
     public function up()
     {
-        Schema::create(_STATE_MASTER_, function (Blueprint $table) {
+        Schema::create(_ROOM_MASTER_, function (Blueprint $table) {
             $table->id();
-            $table->string('Name', 50);
-            $table->integer('CountryId');
-            $table->integer('Status');
-            $table->integer('AddedBy')->default('0');
-            $table->integer('UpdatedBy')->default('0');
+            $table->string('Name', 100);
+            $table->integer('Status')->default(0);
+            $table->integer('AddedBy')->default(0);
+            $table->integer('UpdatedBy')->default(0);
             $table->timestamps();
         });
     }

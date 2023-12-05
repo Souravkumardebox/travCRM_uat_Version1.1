@@ -1,28 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\Hotel\master;
+namespace App\Http\Controllers\Hotel\Master;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Hotel\Master\SeasonMaster;
+use App\Models\Hotel\Master\WeekendMaster;
 
-class SeasonMasterController extends Controller
+class WeekendMasterController extends Controller
 {
     public function index(Request $request){
        
          
         $arrayDataRows = array();
-  
-        call_logger('REQUEST COMES FROM STATE LIST: '.$request->getContent());
         
         $Search = $request->input('Search');
         $Status = $request->input('Status');
         
-        $posts = SeasonMaster::when($Search, function ($query) use ($Search) {
-            return $query->where('Name', 'like', '%' . $Search . '%')
-                         ->orwhere('FromDate', 'like', '%' . $Search . '%')
-                         ->orwhere('ToDate ', 'like', '%' . $Search . '%');
+        $posts = WeekendMaster::when($Search, function ($query) use ($Search) {
+            return $query->where('Name', 'like', '%' . $Search . '%');
         })->when($Status, function ($query) use ($Status) {
              return $query->where('Status',$Status);
         })->select('*')->get('*');
@@ -37,8 +33,7 @@ class SeasonMasterController extends Controller
                 $arrayDataRows[] = [
                     "Id" => $post->id,
                     "Name" => $post->Name,
-                    "FromDate " => $post->FromDate,
-                    "ToDate " => $post->ToDate,
+                    "WeekendDays" => $post->WeekendDays,
                     "Status" => $post->Status,
                     "AddedBy" => $post->AddedBy,
                     "UpdatedBy" => $post->UpdatedBy,
@@ -64,16 +59,13 @@ class SeasonMasterController extends Controller
   
     public function store(Request $request)
     {
-        call_logger('REQUEST COMES FROM ADD/UPDATE SEASON: '.$request->getContent());
         
         try{
             $id = $request->input('id');
             if($id == '') {
                  
                 $businessvalidation =array(
-                    'Name' => 'required|unique:'._DB_.'.'._SEASOM_MASTER_.',Name',
-                    'FromDate' =>'required',
-                    'ToDate ' =>'required',
+                    'Name' => 'required|unique:'._DB_.'.'._WEEKEND_MASTER_.',Name',
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation); 
@@ -81,10 +73,9 @@ class SeasonMasterController extends Controller
                 if($validatordata->fails()){
                     return $validatordata->errors();
                 }else{
-                 $savedata = SeasonMaster::create([
+                 $savedata = WeekendMaster::create([
                     'Name' => $request->Name,
-                    'FromDate' => $request->FromDate,
-                    'ToDate ' => $request->ToDate,
+                    'WeekendDays' => $request->WeekendDays,
                     'Status' => $request->Status,
                     'AddedBy' => $request->AddedBy, 
                     'created_at' => now(),
@@ -100,12 +91,10 @@ class SeasonMasterController extends Controller
             }else{
     
                 $id = $request->input('id');
-                $edit = SeasonMaster::find($id);
+                $edit = WeekendMaster::find($id);
     
                 $businessvalidation =array(
                     'Name' => 'required',
-                    'FromDate' =>'required',
-                    'ToDate' =>'required',
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation);
@@ -115,8 +104,7 @@ class SeasonMasterController extends Controller
                 }else{
                     if ($edit) {
                         $edit->Name = $request->input('Name');
-                        $edit->FromDate = $request->input('FromDate');
-                        $edit->ToDate  = $request->input('ToDate');
+                        $edit->WeekendDays = $request->input('WeekendDays');
                         $edit->Status = $request->input('Status');
                         $edit->UpdatedBy = $request->input('UpdatedBy');
                         $edit->updated_at = now();
@@ -138,7 +126,7 @@ class SeasonMasterController extends Controller
      
     public function destroy(Request $request)
     {
-        $brands = SeasonMaster::find($request->id);
+        $brands = WeekendMaster::find($request->id);
         $brands->delete();
   
         if ($brands) {

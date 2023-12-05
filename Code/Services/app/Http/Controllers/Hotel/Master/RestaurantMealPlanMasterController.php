@@ -59,14 +59,16 @@ class RestaurantMealPlanMasterController extends Controller
   
     public function store(Request $request)
     {
-        call_logger('REQUEST COMES FROM ADD/UPDATE STATE: '.$request->getContent());
-        
         try{
             $id = $request->input('id');
             if($id == '') {
                  
                 $businessvalidation =array(
+// <<<<<<< HEAD
                     'Name' => 'required|unique:'._PGSQL_.'.'._RESTAURANT_MEAL_PLAN_MASTER_.',Name',
+// =======
+                    'Name' => 'required|unique:'._DB_.'.'._RESTAURANT_MEAL_PLAN_MASTER_.',Name',
+// >>>>>>> e1dd4ab9ef3eab251320fe65cf8b2fccdf334e27
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation); 
