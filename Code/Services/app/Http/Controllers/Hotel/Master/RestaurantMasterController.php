@@ -88,7 +88,7 @@ class RestaurantMasterController extends Controller
             if($id == '') {
                  
                 $businessvalidation =array(
-                    'Name' => 'required|unique:'._PGSQL_.'.'._RESTAURANT_MASTER_.',Name',
+                    'Name' => 'required|unique:'._DB_.'.'._RESTAURANT_MASTER_.',Name',
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation); 
