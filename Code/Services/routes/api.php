@@ -11,6 +11,7 @@ use App\Http\Controllers\Others\Master\DestinationMasterController;
 use App\Http\Controllers\Others\Master\LanguageMasterController;
 use App\Http\Controllers\Others\Master\DivisionMasterController;
 use App\Http\Controllers\Others\Master\LeadSourceMasterController;
+use App\Http\Controllers\Others\Master\CurrencyMasterController;
 
 use App\Http\Controllers\Hotel\Master\HotelTypeMasterController;
 use App\Http\Controllers\Hotel\Master\HotelCategoryMasterController;
@@ -80,3 +81,6 @@ Route::post('/addupdatehotel',[HotelAdditionalMasterController::class,'store']);
 
 Route::post('/restaurantmasterlist',[RestaurantMasterController::class,'index']);
 Route::post('/addupdaterestaurantmaster',[RestaurantMasterController::class,'store']);
+
+Route::post('/currencymasterlist',[CurrencyMasterController::class,'index']);
+Route::post('/addupdatecurrencymaster',[CurrencyMasterController::class,'store']);
