@@ -41,7 +41,7 @@ class CurrencyMasterController extends Controller
                   "CountryCode" => $post->CountryCode,
                   "Currencyname" => $post->CurrencyName,
                   "Status" => $post->Status,
-                  "SetDefaut" => $post->SetDefaut,
+                  "SetDefault" => $post->SetDefault,
                   "AddedBy" => $post->AddedBy,
                   "UpdatedBy" => $post->UpdatedBy,
                  
@@ -85,7 +85,7 @@ class CurrencyMasterController extends Controller
                   'CountryCode' => $request->CountryCode,
                   'CurrencyName' => $request->CurrencyName,
                   'Status' => $request->Status,
-                  'SetDefaut' => $request->SetDefaut,
+                  'SetDefault' => $request->SetDefault,
                   'AddedBy' => $request->AddedBy, 
                   'created_at' => now(),
               ]);
@@ -116,7 +116,7 @@ class CurrencyMasterController extends Controller
                       $edit->CountryCode = $request->input('CountryCode');
                       $edit->CurrencyName = $request->input('CurrencyName');
                       $edit->Status = $request->input('Status');
-                      $edit->SetDefaut = $request->input('SetDefaut');
+                      $edit->SetDefault = $request->input('SetDefault');
                       $edit->UpdatedBy = $request->input('UpdatedBy');
                       $edit->updated_at = now();
                       $edit->save();
