@@ -9,6 +9,7 @@ use App\Http\Controllers\Others\Master\StateMasterController;
 use App\Http\Controllers\Hotel\Master\WeekendMasterController;
 use App\Http\Controllers\Others\Master\SeasonMasterController;
 use App\Http\Controllers\Others\Master\CountryMasterController;
+use App\Http\Controllers\Others\Master\CurrencyMasterController;
 use App\Http\Controllers\Others\Master\DivisionMasterController;
 use App\Http\Controllers\Others\Master\LanguageMasterController;
 use App\Http\Controllers\Others\Master\MealPlanMasterController;
@@ -23,7 +24,6 @@ use App\Http\Controllers\Others\Master\BusinessTypeMasterController;
 use App\Http\Controllers\Others\Master\HotelCategoryMasterController;
 use App\Http\Controllers\Others\Master\HotelAdditionalMasterController;
 use App\Http\Controllers\Others\Master\RestaurantMealPlanMasterController;
-use App\Http\Controllers\Others\Master\CurrencyMasterController;
 
 //====================================OTHERS COMMON API ROUTE======================================
 Route::post('/amenitieslist',[AmenitiesMasterController::class,'index']);
@@ -87,10 +87,8 @@ Route::post('/addupdatetour',[TourTypeMasterController::class,'store']);
 Route::post('/weekendlist',[WeekendMasterController::class,'index']);
 Route::post('/addupdateweekend',[WeekendMasterController::class,'store']);
 
-Route::post('/restaurantmasterlist',[RestaurantMasterController::class,'index']);
-Route::post('/addupdaterestaurantmaster',[RestaurantMasterController::class,'store']);
-
-
+Route::post('/currencymasterlist',[CurrencyMasterController::class,'index']);
+Route::post('/addupdatecurrencymaster',[CurrencyMasterController::class,'store']);
 //===========================================END HERE========================================
 
 
