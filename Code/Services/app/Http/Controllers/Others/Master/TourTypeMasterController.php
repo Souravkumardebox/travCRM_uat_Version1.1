@@ -1,23 +1,25 @@
 <?php
 
-namespace App\Http\Controllers\Hotel\Master;
+namespace App\Http\Controllers\Others\master;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Hotel\Master\WeekendMaster;
+use App\Models\Others\Master\TourTypeMaster;
 
-class WeekendMasterController extends Controller
+class TourTypeMasterController extends Controller
 {
     public function index(Request $request){
        
          
         $arrayDataRows = array();
+  
+        call_logger('REQUEST COMES FROM STATE LIST: '.$request->getContent());
         
         $Search = $request->input('Search');
         $Status = $request->input('Status');
         
-        $posts = WeekendMaster::when($Search, function ($query) use ($Search) {
+        $posts = TourTypeMaster::when($Search, function ($query) use ($Search) {
             return $query->where('Name', 'like', '%' . $Search . '%');
         })->when($Status, function ($query) use ($Status) {
              return $query->where('Status',$Status);
@@ -33,7 +35,6 @@ class WeekendMasterController extends Controller
                 $arrayDataRows[] = [
                     "Id" => $post->id,
                     "Name" => $post->Name,
-                    "WeekendDays" => $post->WeekendDays,
                     "Status" => $post->Status,
                     "AddedBy" => $post->AddedBy,
                     "UpdatedBy" => $post->UpdatedBy,
@@ -59,13 +60,14 @@ class WeekendMasterController extends Controller
   
     public function store(Request $request)
     {
+        call_logger('REQUEST COMES FROM ADD/UPDATE STATE: '.$request->getContent());
         
         try{
             $id = $request->input('id');
             if($id == '') {
                  
                 $businessvalidation =array(
-                    'Name' => 'required|unique:'._DB_.'.'._WEEKEND_MASTER_.',Name',
+                    'Name' => 'required|unique:'._DB_.'.'._TOUR_TYPE_MASTER_.',Name',
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation); 
@@ -73,9 +75,8 @@ class WeekendMasterController extends Controller
                 if($validatordata->fails()){
                     return $validatordata->errors();
                 }else{
-                 $savedata = WeekendMaster::create([
+                 $savedata = TourTypeMaster::create([
                     'Name' => $request->Name,
-                    'WeekendDays' => $request->WeekendDays,
                     'Status' => $request->Status,
                     'AddedBy' => $request->AddedBy, 
                     'created_at' => now(),
@@ -91,7 +92,7 @@ class WeekendMasterController extends Controller
             }else{
     
                 $id = $request->input('id');
-                $edit = WeekendMaster::find($id);
+                $edit = TourTypeMaster::find($id);
     
                 $businessvalidation =array(
                     'Name' => 'required',
@@ -104,7 +105,6 @@ class WeekendMasterController extends Controller
                 }else{
                     if ($edit) {
                         $edit->Name = $request->input('Name');
-                        $edit->WeekendDays = $request->input('WeekendDays');
                         $edit->Status = $request->input('Status');
                         $edit->UpdatedBy = $request->input('UpdatedBy');
                         $edit->updated_at = now();
@@ -126,7 +126,7 @@ class WeekendMasterController extends Controller
      
     public function destroy(Request $request)
     {
-        $brands = WeekendMaster::find($request->id);
+        $brands = TourTypeMaster::find($request->id);
         $brands->delete();
   
         if ($brands) {

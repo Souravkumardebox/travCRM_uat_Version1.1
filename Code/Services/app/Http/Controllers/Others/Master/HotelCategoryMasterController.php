@@ -1,32 +1,29 @@
 <?php
 
-namespace App\Http\Controllers\Hotel\master;
+namespace App\Http\Controllers\Others\Master;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Hotel\Master\RestaurantMealPlanMaster;
-class RestaurantMealPlanMasterController extends Controller
+use App\Models\Others\Master\HotelCategoryMaster;
+
+class HotelCategoryMasterController extends Controller
 {
     public function index(Request $request){
        
-         
         $arrayDataRows = array();
   
-        call_logger('REQUEST COMES FROM STATE LIST: '.$request->getContent());
+        call_logger('REQUEST COMES FROM HOTEL CARTEGORY LIST: '.$request->getContent());
         
         $Search = $request->input('Search');
         $Status = $request->input('Status');
         
-        $posts = RestaurantMealPlanMaster::when($Search, function ($query) use ($Search) {
-            return $query->where('Name', 'like', '%' . $Search . '%');
+        $posts = HotelCategoryMaster::when($Search, function ($query) use ($Search) {
+            return $query->where('Name', 'like', '%' . $Search . '%')
+                         ->orwhere('UploadKeyword', 'like', '%' . $Search . '%');
         })->when($Status, function ($query) use ($Status) {
              return $query->where('Status',$Status);
         })->select('*')->get('*');
-  
-        //$countryName = getName(_COUNTRY_MASTER_,3);
-        //$countryName22 = getColumnValue(_COUNTRY_MASTER_,'ShortName','AU','Name');
-        //call_logger('REQUEST2: '.$countryName22);
   
         if ($posts->isNotEmpty()) {
             $arrayDataRows = [];
@@ -34,6 +31,7 @@ class RestaurantMealPlanMasterController extends Controller
                 $arrayDataRows[] = [
                     "Id" => $post->id,
                     "Name" => $post->Name,
+                    "UploadKeyword" => $post->UploadKeyword,
                     "Status" => $post->Status,
                     "AddedBy" => $post->AddedBy,
                     "UpdatedBy" => $post->UpdatedBy,
@@ -59,12 +57,15 @@ class RestaurantMealPlanMasterController extends Controller
   
     public function store(Request $request)
     {
+        call_logger('REQUEST COMES FROM ADD/UPDATE STATE: '.$request->getContent());
+        
         try{
             $id = $request->input('id');
             if($id == '') {
                  
                 $businessvalidation =array(
-                    'Name' => 'required|unique:'._DB_.'.'._RESTAURANT_MEAL_PLAN_MASTER_.',Name',
+                    'Name' => 'required|unique:'._DB_.'.'._HOTEL_CATEGORY_MASTER_.',Name',
+                    'UploadKeyword' =>'required',
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation); 
@@ -72,8 +73,9 @@ class RestaurantMealPlanMasterController extends Controller
                 if($validatordata->fails()){
                     return $validatordata->errors();
                 }else{
-                 $savedata = RestaurantMealPlanMaster::create([
+                 $savedata = HotelCategoryMaster::create([
                     'Name' => $request->Name,
+                    'UploadKeyword' => $request->UploadKeyword,
                     'Status' => $request->Status,
                     'AddedBy' => $request->AddedBy, 
                     'created_at' => now(),
@@ -89,10 +91,11 @@ class RestaurantMealPlanMasterController extends Controller
             }else{
     
                 $id = $request->input('id');
-                $edit = RestaurantMealPlanMaster::find($id);
+                $edit = HotelCategoryMaster::find($id);
     
                 $businessvalidation =array(
                     'Name' => 'required',
+                    'UploadKeyword' =>'required',
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation);
@@ -102,6 +105,7 @@ class RestaurantMealPlanMasterController extends Controller
                 }else{
                     if ($edit) {
                         $edit->Name = $request->input('Name');
+                        $edit->UploadKeyword = $request->input('UploadKeyword');
                         $edit->Status = $request->input('Status');
                         $edit->UpdatedBy = $request->input('UpdatedBy');
                         $edit->updated_at = now();
@@ -123,7 +127,7 @@ class RestaurantMealPlanMasterController extends Controller
      
     public function destroy(Request $request)
     {
-        $brands = RestaurantMealPlanMaster::find($request->id);
+        $brands = HotelCategoryMaster::find($request->id);
         $brands->delete();
   
         if ($brands) {

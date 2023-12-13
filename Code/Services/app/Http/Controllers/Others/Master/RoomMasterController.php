@@ -1,35 +1,27 @@
 <?php
 
-namespace App\Http\Controllers\Hotel\master;
+namespace App\Http\Controllers\Others\Master;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Hotel\Master\SeasonMaster;
+use App\Models\Others\Master\RoomMaster;
 
-class SeasonMasterController extends Controller
+class RoomMasterController extends Controller
 {
     public function index(Request $request){
        
          
         $arrayDataRows = array();
-  
-        call_logger('REQUEST COMES FROM STATE LIST: '.$request->getContent());
-        
+   
         $Search = $request->input('Search');
         $Status = $request->input('Status');
         
-        $posts = SeasonMaster::when($Search, function ($query) use ($Search) {
-            return $query->where('Name', 'like', '%' . $Search . '%')
-                         ->orwhere('FromDate', 'like', '%' . $Search . '%')
-                         ->orwhere('ToDate ', 'like', '%' . $Search . '%');
+        $posts = RoomMaster::when($Search, function ($query) use ($Search) {
+            return $query->where('Name', 'like', '%' . $Search . '%');
         })->when($Status, function ($query) use ($Status) {
              return $query->where('Status',$Status);
         })->select('*')->get('*');
-  
-        //$countryName = getName(_COUNTRY_MASTER_,3);
-        //$countryName22 = getColumnValue(_COUNTRY_MASTER_,'ShortName','AU','Name');
-        //call_logger('REQUEST2: '.$countryName22);
   
         if ($posts->isNotEmpty()) {
             $arrayDataRows = [];
@@ -37,8 +29,6 @@ class SeasonMasterController extends Controller
                 $arrayDataRows[] = [
                     "Id" => $post->id,
                     "Name" => $post->Name,
-                    "FromDate " => $post->FromDate,
-                    "ToDate " => $post->ToDate,
                     "Status" => $post->Status,
                     "AddedBy" => $post->AddedBy,
                     "UpdatedBy" => $post->UpdatedBy,
@@ -64,16 +54,12 @@ class SeasonMasterController extends Controller
   
     public function store(Request $request)
     {
-        call_logger('REQUEST COMES FROM ADD/UPDATE SEASON: '.$request->getContent());
-        
         try{
             $id = $request->input('id');
             if($id == '') {
                  
                 $businessvalidation =array(
-                    'Name' => 'required|unique:'._DB_.'.'._SEASOM_MASTER_.',Name',
-                    'FromDate' =>'required',
-                    'ToDate ' =>'required',
+                    'Name' => 'required|unique:'._DB_.'.'._ROOM_MASTER_.',Name',
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation); 
@@ -81,10 +67,8 @@ class SeasonMasterController extends Controller
                 if($validatordata->fails()){
                     return $validatordata->errors();
                 }else{
-                 $savedata = SeasonMaster::create([
+                 $savedata = RoomMaster::create([
                     'Name' => $request->Name,
-                    'FromDate' => $request->FromDate,
-                    'ToDate ' => $request->ToDate,
                     'Status' => $request->Status,
                     'AddedBy' => $request->AddedBy, 
                     'created_at' => now(),
@@ -100,12 +84,10 @@ class SeasonMasterController extends Controller
             }else{
     
                 $id = $request->input('id');
-                $edit = SeasonMaster::find($id);
+                $edit = RoomMaster::find($id);
     
                 $businessvalidation =array(
                     'Name' => 'required',
-                    'FromDate' =>'required',
-                    'ToDate' =>'required',
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation);
@@ -115,8 +97,6 @@ class SeasonMasterController extends Controller
                 }else{
                     if ($edit) {
                         $edit->Name = $request->input('Name');
-                        $edit->FromDate = $request->input('FromDate');
-                        $edit->ToDate  = $request->input('ToDate');
                         $edit->Status = $request->input('Status');
                         $edit->UpdatedBy = $request->input('UpdatedBy');
                         $edit->updated_at = now();
@@ -138,7 +118,7 @@ class SeasonMasterController extends Controller
      
     public function destroy(Request $request)
     {
-        $brands = SeasonMaster::find($request->id);
+        $brands = RoomMaster::find($request->id);
         $brands->delete();
   
         if ($brands) {

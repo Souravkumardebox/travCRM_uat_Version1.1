@@ -1,25 +1,26 @@
 <?php
 
-namespace App\Models\Hotel\Master;
+namespace App\Models\Others\master;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SeasonMaster extends Model
+class MealPlanMaster extends Model
 {
-    use HasFactory;
-    protected $table = _SEASOM_MASTER_;
-    protected $primarykey = 'id'; 
+    use HasFactory;use HasFactory;
+    protected $table = _MEAL_PLAN_MASTER_;
+    protected $primarykey = 'id';
     protected $fillable = [
         'Name',
-        'FromDate',
-        'ToDate ',
+        'ShortName',
+        'SetDefault',
         'AddedBy',
         'UpdatedBy',
+        'Status',
         'created_at',
         'updated_at',
-       
-       
+
+
     ];
     public $timestamps = false;
 }

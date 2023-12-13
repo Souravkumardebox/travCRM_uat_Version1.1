@@ -1,43 +1,42 @@
 <?php
 
-namespace App\Http\Controllers\Hotel\Master;
+namespace App\Http\Controllers\Others\Master;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Hotel\Master\HotelChainMaster;
+use App\Models\Others\Master\HotelTypeMaster;
 
-class HotelChainMasterController extends Controller
+class HotelTypeMasterController extends Controller
 {
     public function index(Request $request){
        
          
         $arrayDataRows = array();
-   
+  
+        call_logger('REQUEST COMES FROM STATE LIST: '.$request->getContent());
+        
         $Search = $request->input('Search');
         $Status = $request->input('Status');
         
-        $posts = HotelChainMaster::when($Search, function ($query) use ($Search) {
-            return $query->where('Name', 'like', '%' . $Search . '%');
+        $posts = HotelTypeMaster::when($Search, function ($query) use ($Search) {
+            return $query->where('Name', 'like', '%' . $Search . '%')
+                         ->orwhere('UploadKeyword', 'like', '%' . $Search . '%');
         })->when($Status, function ($query) use ($Status) {
              return $query->where('Status',$Status);
         })->select('*')->get('*');
-   
+  
+        //$countryName = getName(_COUNTRY_MASTER_,3);
+        //$countryName22 = getColumnValue(_COUNTRY_MASTER_,'ShortName','AU','Name');
+        //call_logger('REQUEST2: '.$countryName22);
+  
         if ($posts->isNotEmpty()) {
             $arrayDataRows = [];
             foreach ($posts as $post){
                 $arrayDataRows[] = [
                     "Id" => $post->id,
                     "Name" => $post->Name,
-                    "Location" => $post->Location,
-                    "HotelWebsite" => $post->HotelWebsite,
-                    "SelfSupplier" => $post->SelfSupplier,
-                    "ContactType" => $post->ContactType,
-                    "ContactName" => $post->ContactName,
-                    "ContactDesignation" => $post->ContactDesignation,
-                    "ContactCountryCode" => $post->ContactCountryCode,
-                    "ContactMobile" => $post->ContactMobile,
-                    "ContactEmail" => $post->ContactEmail,
+                    "UploadKeyword" => $post->UploadKeyword,
                     "Status" => $post->Status,
                     "AddedBy" => $post->AddedBy,
                     "UpdatedBy" => $post->UpdatedBy,
@@ -63,12 +62,15 @@ class HotelChainMasterController extends Controller
   
     public function store(Request $request)
     {
+        call_logger('REQUEST COMES FROM ADD/UPDATE STATE: '.$request->getContent());
+        
         try{
             $id = $request->input('id');
             if($id == '') {
                  
                 $businessvalidation =array(
-                    'Name' => 'required|unique:'._DB_.'.'._HOTEL_CHAIN_MASTER_.',Name',
+                    'Name' => 'required|unique:'._DB_.'.'._HOTEL_TYPE_MASTER_.',Name',
+                    'UploadKeyword' =>'required',
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation); 
@@ -76,17 +78,9 @@ class HotelChainMasterController extends Controller
                 if($validatordata->fails()){
                     return $validatordata->errors();
                 }else{
-                 $savedata = HotelChainMaster::create([
+                 $savedata = HotelTypeMaster::create([
                     'Name' => $request->Name,
-                    'Location' => $request->Location,
-                    'HotelWebsite' => $request->HotelWebsite,
-                    'SelfSupplier' => $request->SelfSupplier,
-                    'ContactType' => $request->ContactType,
-                    'ContactName' => $request->ContactName,
-                    'ContactDesignation' => $request->ContactDesignation,
-                    'ContactCountryCode' => $request->ContactCountryCode,
-                    'ContactMobile' => $request->ContactMobile,
-                    'ContactEmail' => $request->ContactEmail,
+                    'UploadKeyword' => $request->UploadKeyword,
                     'Status' => $request->Status,
                     'AddedBy' => $request->AddedBy, 
                     'created_at' => now(),
@@ -102,10 +96,11 @@ class HotelChainMasterController extends Controller
             }else{
     
                 $id = $request->input('id');
-                $edit = HotelChainMaster::find($id);
+                $edit = HotelTypeMaster::find($id);
     
                 $businessvalidation =array(
                     'Name' => 'required',
+                    'UploadKeyword' =>'required',
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation);
@@ -115,15 +110,7 @@ class HotelChainMasterController extends Controller
                 }else{
                     if ($edit) {
                         $edit->Name = $request->input('Name');
-                        $edit->Location = $request->input('Location');
-                        $edit->HotelWebsite = $request->input('HotelWebsite');
-                        $edit->SelfSupplier = $request->input('SelfSupplier');
-                        $edit->ContactType = $request->input('ContactType');
-                        $edit->ContactName = $request->input('ContactName');
-                        $edit->ContactDesignation = $request->input('ContactDesignation');
-                        $edit->ContactCountryCode = $request->input('ContactCountryCode');
-                        $edit->ContactMobile = $request->input('ContactMobile');
-                        $edit->ContactEmail = $request->input('ContactEmail');
+                        $edit->UploadKeyword = $request->input('UploadKeyword');
                         $edit->Status = $request->input('Status');
                         $edit->UpdatedBy = $request->input('UpdatedBy');
                         $edit->updated_at = now();
@@ -145,7 +132,7 @@ class HotelChainMasterController extends Controller
      
     public function destroy(Request $request)
     {
-        $brands = HotelChainMaster::find($request->id);
+        $brands = HotelTypeMaster::find($request->id);
         $brands->delete();
   
         if ($brands) {
