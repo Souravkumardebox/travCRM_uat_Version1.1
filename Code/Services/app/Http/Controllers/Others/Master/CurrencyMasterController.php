@@ -24,7 +24,7 @@ class CurrencyMasterController extends Controller
           return $query->where('CountryCode', 'like', '%' . $Search . '%');
       })->when($Status, function ($query) use ($Status) {
            return $query->where('Status',$Status);
-      })->select('*')->get('*');
+      })->select('*')->orderBy('CurrencyName')->get('*');
 
       
 
