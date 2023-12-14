@@ -90,8 +90,12 @@ Route::post('/addupdateweekend',[WeekendMasterController::class,'store']);
 Route::post('/currencymasterlist',[CurrencyMasterController::class,'index']);
 Route::post('/addupdatecurrencymaster',[CurrencyMasterController::class,'store']);
 
-Route::post('/contacttablelist',[ContactTableController::class,'index']);
+Route::post('/contactlist',[ContactTableController::class,'index']);
 Route::post('/addupdatecontact',[ContactTableController::class,'store']);
+
+Route::post('/hotellist',[ContactTableController::class,'index']);
+Route::post('/addupdatehotel',[ContactTableController::class,'store']);
+
 
 //===========================================END HERE========================================
 
