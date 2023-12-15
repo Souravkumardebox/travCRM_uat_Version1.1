@@ -23,7 +23,8 @@ use App\Http\Controllers\Others\Master\BusinessTypeMasterController;
 use App\Http\Controllers\Others\Master\HotelCategoryMasterController;
 use App\Http\Controllers\Others\Master\HotelAdditionalMasterController;
 use App\Http\Controllers\Others\Master\RestaurantMealPlanMasterController;
-use App\Http\Controllers\Others\Master\ContactTableController;
+use App\Http\Controllers\Others\Master\ContactDetailsController;
+use App\Http\Controllers\Others\Master\MarketMasterController;
 
 //====================================OTHERS COMMON API ROUTE======================================
 Route::post('/amenitieslist',[AmenitiesMasterController::class,'index']);
@@ -90,11 +91,14 @@ Route::post('/addupdateweekend',[WeekendMasterController::class,'store']);
 Route::post('/currencymasterlist',[CurrencyMasterController::class,'index']);
 Route::post('/addupdatecurrencymaster',[CurrencyMasterController::class,'store']);
 
-Route::post('/contactlist',[ContactTableController::class,'index']);
-Route::post('/addupdatecontact',[ContactTableController::class,'store']);
+Route::post('/contactlist',[ContactDetailsController::class,'index']);
+Route::post('/addupdatecontact',[ContactDetailsController::class,'store']);
 
 Route::post('/hotellist',[ContactTableController::class,'index']);
 Route::post('/addupdatehotel',[ContactTableController::class,'store']);
+
+Route::post('/marketlist',[MarketMasterController::class,'index']);
+Route::post('/addupdatemarket',[MarketMasterController::class,'store']);
 
 
 //===========================================END HERE========================================
