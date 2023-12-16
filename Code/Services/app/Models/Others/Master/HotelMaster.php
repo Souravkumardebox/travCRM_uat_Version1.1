@@ -9,33 +9,10 @@ class HotelMaster extends Model
 {
     use HasFactory;
     protected $table = _HOTEL_MASTER_;
-    protected $primarykey = "id";
+    protected $primarykey = 'id';
     protected $fillable = [
-     'HotelName',  
-     'HotelCode',
-     'HotelCategory',
-     'HotelCountry',
-     'HotelState',
-     'HotelCity',
-     'HotelType',
-     'HotelPinCode',
-     'HotelAddress',
-     'HotelLink',
-     'HotelLocation',
-     'HotelGSTN',
-     'HotelWeekend',
-     'CheckIn',
-     'CheckOut',
-     'HotelInfo',
-     'HotelPolicy',
-     'HotelT&C',
-     'HotelAmenties',
-     'HotelRoomType',
-     'HotelStatus',
-     'HotelChain',
-     'Contact_id',
-     'created_at',
-     'updated_at',
+        'HotelChain', 'HotelName', 'HotelCode', 'HotelCategory', 'HotelType', 'HotelCountry', 'HotelState',
+        'HotelCity', 'HotelPinCode', 'HotelAddress', 'HotelLocality', 'HotelGSTN', 'HotelWeekend', 'CheckIn', 'CheckOut', 'HotelLink', 'HotelInfo', 'HotelPolicy', 'HotelTC', 'HotelAmenties', 'HotelRoomType', 'HotelStatus', 'SelfSupplier', 'AddedBy', 'UpdatedBy', 'created_at', 'updated_at'
     ];
     public $timestamps = false;
 }

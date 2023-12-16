@@ -13,23 +13,23 @@ class HotelChainMaster extends Migration
      */
     public function up()
     {
-        /*Schema::create(_HOTEL_CHAIN_MASTER_, function (Blueprint $table) {
+        Schema::create(_HOTEL_CHAIN_MASTER_, function (Blueprint $table) {
             $table->id();
-            $table->string('Name', 100);
-            $table->string('Location', 100)->nullable();
-            $table->text('HotelWebsite')->nullable();
+            $table->string('Name', 100)->default(null);
+            $table->string('Location', 100)->default(null);
+            $table->string('HotelWebsite', 255)->default(null);
             $table->integer('SelfSupplier')->default(0);
             $table->integer('ContactType')->default(0);
-            $table->string('ContactName', 100)->nullable();
-            $table->string('ContactDesignation', 150)->nullable();
-            $table->string('ContactCountryCode', 10)->nullable();
-            $table->integer('ContactMobile', 15);
-            $table->string('ContactEmail', 100);
+            $table->string('ContactName', 100)->default(null);
+            $table->string('ContactDesignation', 150)->default(null);
+            $table->string('ContactCountryCode', 10)->default(null);
+            $table->string('ContactMobile', 20)->default(null);
+            $table->string('ContactEmail', 100)->default(null);
             $table->integer('Status')->default(0);
             $table->integer('AddedBy')->default(0);
             $table->integer('UpdatedBy')->default(0);
             $table->timestamps();
-        });*/
+        });
     }
 
     /**
