@@ -16,6 +16,10 @@ define("_BUSINESS_TYPE_MASTER_", "others.business_type_master");
 define("_DIVISION_MASTER_", "others.division_master");
 define("_LEAD_SOURCE_MASTER_", "others.lead_source_master");
 define("_CURRENCY_MASTER_", "others.currency_master");
+//define("_CONTACT_TABLE_", "others.contact_table");
+define("_HOTEL_MASTERS_", "others.create_hotel_masters");
+define("_CONTACT_DETAILS_", "others.contact_details");
+define("_MARKET_MASTER_", "others.market_master");
 /////////////////////////////END HERE///////////////////////////
 
 /////////////////////////HOTEL RELATED MASTER///////////////////
