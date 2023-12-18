@@ -38,4 +38,7 @@ define("_SEARCH_HOTEL_RATE_", "hotel.search_hotelrate_");
 
 /////////////////////END HERE///////////////////////////////
 
+/////////////////////////TRANSPORT RELATED MASTER///////////////////
+define("_VEGICLE_TYPE_MASTER_", "transport.vegicle_type_master");
+
 ?>
