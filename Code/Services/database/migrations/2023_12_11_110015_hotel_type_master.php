@@ -14,7 +14,6 @@ class HotelTypeMaster extends Migration
     public function up()
     {
         Schema::create(_HOTEL_TYPE_MASTER_, function (Blueprint $table) {
-            $table->id();
             $table->string('Name', 50);
             $table->string('UploadKeyword', 155)->nullable();
             $table->integer('Status')->default(0);

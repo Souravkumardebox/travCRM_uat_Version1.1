@@ -303,7 +303,7 @@
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
-        'schema' => 'public',
+        'schema' => 'others',
         'sslmode' => 'prefer',
       ),
       'sqlsrv' => 
