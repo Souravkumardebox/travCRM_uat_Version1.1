@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+//===============================OTHERS CONTROLLERS==================================
 use App\Http\Controllers\Others\Master\CityMasterController;
 use App\Http\Controllers\Others\Master\RoomMasterController;
 use App\Http\Controllers\Others\Master\HotelMasterController;
@@ -10,8 +11,6 @@ use App\Http\Controllers\Others\Master\MarketMasterController;
 use App\Http\Controllers\Others\Master\SeasonMasterController;
 use App\Http\Controllers\Others\Master\CountryMasterController;
 use App\Http\Controllers\Others\Master\WeekendMasterController;
-use App\Http\Controllers\Hotel\Master\HotelRateMasterController;
-use App\Http\Controllers\Hotel\Master\SearchHotelRateController;
 use App\Http\Controllers\Others\Master\ContactDetailsController;
 use App\Http\Controllers\Others\Master\CurrencyMasterController;
 use App\Http\Controllers\Others\Master\DivisionMasterController;
@@ -28,6 +27,11 @@ use App\Http\Controllers\Others\Master\BusinessTypeMasterController;
 use App\Http\Controllers\Others\Master\HotelCategoryMasterController;
 use App\Http\Controllers\Others\Master\HotelAdditionalMasterController;
 use App\Http\Controllers\Others\Master\RestaurantMealPlanMasterController;
+//===============================HOTEL CONTROLLERS==================================
+use App\Http\Controllers\Hotel\Master\HotelRateMasterController;
+use App\Http\Controllers\Hotel\Master\SearchHotelRateController;
+
+
 
 //====================================OTHERS COMMON API ROUTE======================================
 Route::post('/amenitieslist',[AmenitiesMasterController::class,'index']);
