@@ -42,5 +42,6 @@ define("_SEARCH_HOTEL_RATE_", "hotel.search_hotelrate_");
 define("_VEHICLE_TYPE_MASTER_", "transport.vehicle_type_master");
 define("_VEHICLE_BRAND_MASTER_", "transport.vehicle_brand_master");
 define("_TRANSFER_TYPE_MASTER_", "transport.transfer_type_master");
+define("_VEHICLE_MASTER_", "transport.vehicle_master");
 
 ?>
