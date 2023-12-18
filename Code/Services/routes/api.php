@@ -32,6 +32,8 @@ use App\Http\Controllers\Hotel\Master\HotelRateMasterController;
 use App\Http\Controllers\Hotel\Master\SearchHotelRateController;
 //===============================TRANSPORT CONTROLLERS==================================
 use App\Http\Controllers\Transport\Master\VehicleTypeMasterController;
+use App\Http\Controllers\Transport\Master\VehicleBrandMasterController;
+
 
 
 
@@ -120,5 +122,8 @@ Route::post('/addupdatesearchhotelrate',[SearchHotelRateController::class,'store
 
 // ========================================Transport API ROUTE===============================
 Route::post('/vehicletypemasterlist',[VehicleTypeMasterController::class,'index']);
-Route::post('/addupdatevehicletyprmaster',[VehicleTypeMasterController::class,'store']);
+Route::post('/addupdatevehicletypemaster',[VehicleTypeMasterController::class,'store']);
+
+Route::post('/vehiclebrandmasterlist',[VehicleBrandMasterController::class,'index']);
+Route::post('/addupdatevehiclebrandmaster',[VehicleBrandMasterController::class,'store']);
 // ===========================================END HERE=======================================
