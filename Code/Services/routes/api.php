@@ -40,6 +40,7 @@ use App\Http\Controllers\Transport\Master\VehicleMasterController;
 
 
 //====================================OTHERS COMMON API ROUTE======================================
+
 Route::post('/amenitieslist',[AmenitiesMasterController::class,'index']);
 Route::post('/addupdateamenities',[AmenitiesMasterController::class,'store']);
 
