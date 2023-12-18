@@ -5,10 +5,12 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Others\Master\DestinationMaster;
-class DestinationMasterController extends Controller
-{   
+use App\Models\Others\Master\CurrencyMaster;
+
+class CurrencyMasterController extends Controller
+{  
    public function index(Request $request){
+    
        
          
       $arrayDataRows = array();
@@ -18,16 +20,13 @@ class DestinationMasterController extends Controller
       $Search = $request->input('Search');
       $Status = $request->input('Status');
       
-      $posts = DestinationMaster::when($Search, function ($query) use ($Search) {
-          return $query->where('CountryId', 'like', '%' . $Search . '%')
-                     ->orwhere('State', 'like', '%' . $Search . '%')
-                     ->orwhere('DestinationName', 'like', '%' . $Search . '%')
-                     ->orwhere('Description', 'like', '%' . $Search . '%')
-                     ->orwhere('SetDefault', 'like', '%' . $Search . '%')
-                     ->orwhere('State', 'like', '%' . $Search . '%');
+      $posts = CurrencyMaster::when($Search, function ($query) use ($Search) {
+          return $query->where('CountryCode', 'like', '%' . $Search . '%');
       })->when($Status, function ($query) use ($Status) {
            return $query->where('Status',$Status);
-      })->select('*')->orderBy('Name')->get('*');
+      })->select('*')->orderBy('CurrencyName')->get('*');
+
+      
 
       //$countryName = getName(_COUNTRY_MASTER_,3);
       //$countryName22 = getColumnValue(_COUNTRY_MASTER_,'ShortName','AU','Name');
@@ -38,20 +37,17 @@ class DestinationMasterController extends Controller
           foreach ($posts as $post){
               $arrayDataRows[] = [
                   "Id" => $post->id,
-                  "Name" => $post->Name,
-                  "StateName" => getName(_STATE_MASTER_,$post->StateId),
-                  "CountryName" => getName(_COUNTRY_MASTER_,$post->CountryId),
                   "CountryId" => $post->CountryId,
-                  "StateId" => $post->StateId,
-                  "Description" => $post->Description,
-                  "SetDefault" => $post->SetDefault,
+                  "CountryCode" => $post->CountryCode,
+                  "Currencyname" => $post->CurrencyName,
                   "Status" => $post->Status,
+                  "SetDefault" => $post->SetDefault,
                   "AddedBy" => $post->AddedBy,
                   "UpdatedBy" => $post->UpdatedBy,
-                  "Created_at" => $post->created_at,
-                  "Updated_at" => $post->updated_at
+                 
               ];
           }
+          
           
           return response()->json([
               'Status' => 200,
@@ -70,21 +66,13 @@ class DestinationMasterController extends Controller
 
   public function store(Request $request)
   {
-      call_logger('REQUEST COMES FROM ADD/UPDATE STATE: '.$request->getContent());
       
       try{
           $id = $request->input('id');
           if($id == '') {
                
               $businessvalidation =array(
-                  'CountryId' => 'required',
-                  'StateId' => 'required',
-                  'Name' => 'required',
-                  'Description' => 'required',
-                  'SetDefault' => 'required',
-                  'AddedBy' => 'required',
-                  'Status' => 'required',
-
+                  'CountryId' => 'required|unique:'._DB_.'.'._CURRENCY_MASTER_.',CountryId',
               );
                
               $validatordata = validator::make($request->all(), $businessvalidation); 
@@ -92,14 +80,13 @@ class DestinationMasterController extends Controller
               if($validatordata->fails()){
                   return $validatordata->errors();
               }else{
-               $savedata = DestinationMaster::create([
-                  'CountryId' => $request->CountryId,
-                  'StateId' => $request->StateId,   
-                  'Name' => $request->Name,   
-                  'Description' => $request->Description,   
-                  'SetDefault' => $request->SetDefault,   
-                  'AddedBy' => $request->AddedBy,   
+               $savedata = CurrencyMaster::create([
+                'CountryId' => $request->CountryId,
+                  'CountryCode' => $request->CountryCode,
+                  'CurrencyName' => $request->CurrencyName,
                   'Status' => $request->Status,
+                  'SetDefault' => $request->SetDefault,
+                  'AddedBy' => $request->AddedBy, 
                   'created_at' => now(),
               ]);
 
@@ -113,15 +100,10 @@ class DestinationMasterController extends Controller
           }else{
   
               $id = $request->input('id');
-              $edit = DestinationMaster::find($id);
+              $edit = CurrencyMaster::find($id);
   
               $businessvalidation =array(
-                  'CountryId' => 'required',
-                  'StateId' => 'required',
-                  'Name' => 'required',
-                  'Description' => 'required',
-                  'UpdatedBy' => 'required',
-                  'Status' => 'required',
+                  'CountryCode' => 'required',
               );
                
               $validatordata = validator::make($request->all(), $businessvalidation);
@@ -131,15 +113,13 @@ class DestinationMasterController extends Controller
               }else{
                   if ($edit) {
                       $edit->CountryId = $request->input('CountryId');
-                      $edit->StateId = $request->input('StateId');
-                      $edit->Name = $request->input('Name');
-                      $edit->Description = $request->input('Description');
+                      $edit->CountryCode = $request->input('CountryCode');
+                      $edit->CurrencyName = $request->input('CurrencyName');
+                      $edit->Status = $request->input('Status');
                       $edit->SetDefault = $request->input('SetDefault');
                       $edit->UpdatedBy = $request->input('UpdatedBy');
-                      $edit->Status = $request->input('Status');
                       $edit->updated_at = now();
                       $edit->save();
-
                       
                       return response()->json(['Status' => 0, 'Message' => 'Data updated successfully']);
                   } else {

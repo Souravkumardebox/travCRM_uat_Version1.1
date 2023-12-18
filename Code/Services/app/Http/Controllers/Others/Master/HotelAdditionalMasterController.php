@@ -1,32 +1,57 @@
 <?php
 
-namespace App\Http\Controllers\Others\Master;
-
-use Illuminate\Http\Request;
+namespace App\Http\Controllers\Others\master;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Others\Master\CountryMaster;
+use App\Models\Others\Master\HotelAdditionalMaster;
 
-class CountryMasterController extends Controller
+class HotelAdditionalMasterController extends Controller
 {
     public function index(Request $request){
+       
+         
+        $arrayDataRows = array();
+  
+        call_logger('REQUEST COMES FROM Hotel Addition LIST: '.$request->getContent());
+        
         $Search = $request->input('Search');
         $Status = $request->input('Status');
-
-        $posts = CountryMaster::when($Search, function ($query) use ($Search) {
+        
+        $posts = HotelAdditionalMaster::when($Search, function ($query) use ($Search) {
             return $query->where('Name', 'like', '%' . $Search . '%')
-                   ->orwhere('ShortName', 'like', '%' . $Search . '%');
+                         ->orwhere('Details', 'like', '%' . $Search . '%');
         })->when($Status, function ($query) use ($Status) {
              return $query->where('Status',$Status);
         })->select('*')->orderBy('Name')->get('*');
-
+  
+        ////$countryName = getName(_COUNTRY_MASTER_,3);
+        //$countryName22 = getColumnValue(_COUNTRY_MASTER_,'ShortName','AU','Name');
+        //call_logger('REQUEST2: '.$countryName22);
+  
         if ($posts->isNotEmpty()) {
+            $arrayDataRows = [];
+            foreach ($posts as $post){
+                $arrayDataRows[] = [
+                    "Id" => $post->id,
+                    "Name" => $post->Name,
+                    "Details" => $post->Details,
+                    "Status" => $post->Status,
+                    "AddedBy" => $post->AddedBy,
+                    "UpdatedBy" => $post->UpdatedBy,
+                    "Created_at" => $post->created_at,
+                    "Updated_at" => $post->updated_at
+                ];
+            }
+            
             return response()->json([
                 'Status' => 200,
                 'TotalRecord' => $posts->count('id'),
-                'DataList' => $posts
+                'DataList' => $arrayDataRows
             ]);
-        } else {
+        
+        }else {
             return response()->json([
                 "Status" => 0,
                 "TotalRecord" => $posts->count('id'), 
@@ -34,16 +59,18 @@ class CountryMasterController extends Controller
             ]);
         }
     }
-
+  
     public function store(Request $request)
     {
+        call_logger('REQUEST COMES FROM ADD/UPDATE STATE: '.$request->getContent());
+        
         try{
             $id = $request->input('id');
             if($id == '') {
                  
                 $businessvalidation =array(
-                    'Name' => 'required|unique:'._DB_.'.'._COUNTRY_MASTER_.',Name',
-                    'ShortName' => 'required'
+                    'Name' => 'required|unique:'._DB_.'.'._HOTEL_ADDITIONAL_MASTER_.',Name',
+                    'Details' =>'required',
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation); 
@@ -51,15 +78,14 @@ class CountryMasterController extends Controller
                 if($validatordata->fails()){
                     return $validatordata->errors();
                 }else{
-                 $savedata = CountryMaster::create([
+                 $savedata = HotelAdditionalMaster::create([
                     'Name' => $request->Name,
-                    'ShortName' => $request->ShortName,
-                    'SetDefault' => $request->SetDefault,
+                    'Details' => $request->Details,
                     'Status' => $request->Status,
                     'AddedBy' => $request->AddedBy, 
                     'created_at' => now(),
                 ]);
-
+  
                 if ($savedata) {
                     return response()->json(['Status' => 0, 'Message' => 'Data added successfully!']);
                 } else {
@@ -70,11 +96,11 @@ class CountryMasterController extends Controller
             }else{
     
                 $id = $request->input('id');
-                $edit = CountryMaster::find($id);
+                $edit = HotelAdditionalMaster::find($id);
     
                 $businessvalidation =array(
-                    'Name' => 'required|unique:'._PGSQL_.'.'._COUNTRY_MASTER_.',Name',
-                    'ShortName' => 'required'
+                    'Name' => 'required',
+                    'Details' =>'required',
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation);
@@ -84,8 +110,7 @@ class CountryMasterController extends Controller
                 }else{
                     if ($edit) {
                         $edit->Name = $request->input('Name');
-                        $edit->ShortName = $request->input('ShortName');
-                        $edit->SetDefault = $request->input('SetDefault');
+                        $edit->Details = $request->input('Details');
                         $edit->Status = $request->input('Status');
                         $edit->UpdatedBy = $request->input('UpdatedBy');
                         $edit->updated_at = now();
@@ -101,5 +126,20 @@ class CountryMasterController extends Controller
             call_logger("Exception Error  ===>  ". $e->getMessage());
             return response()->json(['Status' => -1, 'Message' => 'Exception Error Found']);
         }
+    }
+  
+  
+     
+    public function destroy(Request $request)
+    {
+        $brands = HotelAdditionalMaster::find($request->id);
+        $brands->delete();
+  
+        if ($brands) {
+            return response()->json(['result' =>'Data deleted successfully!']);
+        } else {
+            return response()->json(['result' =>'Failed to delete data.'], 500);
+        }
+    
     }
 }

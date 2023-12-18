@@ -1,32 +1,51 @@
 <?php
 
-namespace App\Http\Controllers\Others\Master;
-
-use Illuminate\Http\Request;
+namespace App\Http\Controllers\Transport\Master;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Others\Master\CountryMaster;
+use App\Models\Transport\Master\VehicleMaster;
 
-class CountryMasterController extends Controller
+class VehicleMasterController extends Controller
 {
     public function index(Request $request){
+       
+         
+        $arrayDataRows = array();
+   
         $Search = $request->input('Search');
         $Status = $request->input('Status');
-
-        $posts = CountryMaster::when($Search, function ($query) use ($Search) {
-            return $query->where('Name', 'like', '%' . $Search . '%')
-                   ->orwhere('ShortName', 'like', '%' . $Search . '%');
+        
+        $posts = VehicleMaster::when($Search, function ($query) use ($Search) {
+            return $query->where('Name', 'like', '%' . $Search . '%');
         })->when($Status, function ($query) use ($Status) {
              return $query->where('Status',$Status);
         })->select('*')->orderBy('Name')->get('*');
-
+  
         if ($posts->isNotEmpty()) {
+            $arrayDataRows = [];
+            foreach ($posts as $post){
+                $arrayDataRows[] = [
+                    "Id" => $post->id,
+                    "VehicleType" => $post->VehicleType,
+                    "Capacity" => $post->Capacity,
+                    "VehicleBrand" => $post->VehicleBrand,
+                    "Name" => $post->Name,
+                    "ImageName" => $post->ImageName,
+                    "Status" => $post->Status,
+                    "AddedBy" => $post->AddedBy,
+                    "UpdatedBy" => $post->UpdatedBy,
+                ];
+            }
+            
             return response()->json([
                 'Status' => 200,
                 'TotalRecord' => $posts->count('id'),
-                'DataList' => $posts
+                'DataList' => $arrayDataRows
             ]);
-        } else {
+        
+        }else {
             return response()->json([
                 "Status" => 0,
                 "TotalRecord" => $posts->count('id'), 
@@ -34,7 +53,7 @@ class CountryMasterController extends Controller
             ]);
         }
     }
-
+  
     public function store(Request $request)
     {
         try{
@@ -42,8 +61,7 @@ class CountryMasterController extends Controller
             if($id == '') {
                  
                 $businessvalidation =array(
-                    'Name' => 'required|unique:'._DB_.'.'._COUNTRY_MASTER_.',Name',
-                    'ShortName' => 'required'
+                    'Name' => 'required|unique:'._DB_.'.'._VEHICLE_MASTER_.',Name',
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation); 
@@ -51,15 +69,17 @@ class CountryMasterController extends Controller
                 if($validatordata->fails()){
                     return $validatordata->errors();
                 }else{
-                 $savedata = CountryMaster::create([
+                 $savedata = VehicleMaster::create([
+                    'VehicleType' => $request->VehicleType,
+                    'Capacity' => $request->Capacity,
+                    'VehicleBrand' => $request->VehicleBrand,
                     'Name' => $request->Name,
-                    'ShortName' => $request->ShortName,
-                    'SetDefault' => $request->SetDefault,
+                    'ImageName' => $request->ImageName,
                     'Status' => $request->Status,
                     'AddedBy' => $request->AddedBy, 
                     'created_at' => now(),
                 ]);
-
+  
                 if ($savedata) {
                     return response()->json(['Status' => 0, 'Message' => 'Data added successfully!']);
                 } else {
@@ -70,11 +90,10 @@ class CountryMasterController extends Controller
             }else{
     
                 $id = $request->input('id');
-                $edit = CountryMaster::find($id);
+                $edit = VehicleMaster::find($id);
     
                 $businessvalidation =array(
-                    'Name' => 'required|unique:'._PGSQL_.'.'._COUNTRY_MASTER_.',Name',
-                    'ShortName' => 'required'
+                    'Name' => 'required',
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation);
@@ -83,9 +102,11 @@ class CountryMasterController extends Controller
                  return $validatordata->errors();
                 }else{
                     if ($edit) {
+                        $edit->VehicleType = $request->input('VehicleType');
+                        $edit->Capacity = $request->input('Capacity');
+                        $edit->VehicleBrand = $request->input('VehicleBrand');
                         $edit->Name = $request->input('Name');
-                        $edit->ShortName = $request->input('ShortName');
-                        $edit->SetDefault = $request->input('SetDefault');
+                        $edit->ImageName = $request->input('ImageName');
                         $edit->Status = $request->input('Status');
                         $edit->UpdatedBy = $request->input('UpdatedBy');
                         $edit->updated_at = now();
@@ -102,4 +123,20 @@ class CountryMasterController extends Controller
             return response()->json(['Status' => -1, 'Message' => 'Exception Error Found']);
         }
     }
+  
+  
+     
+    public function destroy(Request $request)
+    {
+        $brands = VehicleMaster::find($request->id);
+        $brands->delete();
+  
+        if ($brands) {
+            return response()->json(['result' =>'Data deleted successfully!']);
+        } else {
+            return response()->json(['result' =>'Failed to delete data.'], 500);
+        }
+    
+    }
+
 }
