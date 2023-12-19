@@ -27,6 +27,7 @@ use App\Http\Controllers\Others\Master\BusinessTypeMasterController;
 use App\Http\Controllers\Others\Master\HotelCategoryMasterController;
 use App\Http\Controllers\Others\Master\HotelAdditionalMasterController;
 use App\Http\Controllers\Others\Master\RestaurantMealPlanMasterController;
+use App\Http\Controllers\Others\Master\ImageGalleryMasterController;
 //===============================HOTEL CONTROLLERS==================================
 use App\Http\Controllers\Hotel\Master\HotelRateMasterController;
 use App\Http\Controllers\Hotel\Master\SearchHotelRateController;
@@ -35,6 +36,12 @@ use App\Http\Controllers\Transport\Master\VehicleTypeMasterController;
 use App\Http\Controllers\Transport\Master\VehicleBrandMasterController;
 use App\Http\Controllers\Transport\Master\TransferTypeMasterController;
 use App\Http\Controllers\Transport\Master\VehicleMasterController;
+// =================================SIGHTSEENING CONTROLLER===============================
+use App\Http\Controllers\Sightseeing\AirlineMasterController;
+use App\Http\Controllers\Sightseeing\MonumentMasterController;
+use App\Http\Controllers\Sightseeing\SightseeingMasterController;
+use App\Http\Controllers\Sightseeing\TrainMasterController;
+
 
 
 
@@ -113,6 +120,9 @@ Route::post('/addupdatecontact',[ContactDetailsController::class,'store']);
 
 Route::post('/marketlist',[MarketMasterController::class,'index']);
 Route::post('/addupdatemarket',[MarketMasterController::class,'store']);
+
+Route::post('/imagegallerylist',[ImageGalleryMasterController::class,'index']);
+Route::post('/addupdateimagegallery',[ImageGalleryMasterController::class,'store']);
 //===========================================END HERE========================================
 
 // ========================================Hotel API ROUTE===================================
@@ -136,3 +146,16 @@ Route::post('/addupdatetransfertypemaster',[TransferTypeMasterController::class,
 Route::post('/vehiclemasterlist',[VehicleMasterController::class,'index']);
 Route::post('/addupdatevehiclemaster',[VehicleMasterController::class,'store']);
 // ===========================================END HERE=======================================
+
+// =============================================SIGHTSEENING API ROUTE================================
+Route::post('/airlinemasterlist',[AirlineMasterController::class,'index']);
+Route::post('/addupdateairlinemaster',[AirlineMasterController::class,'store']);
+
+Route::post('/trainMasterlist',[TrainMasterController::class,'index']);
+Route::post('/addupdatetrainmaster',[TrainMasterController::class,'store']);
+
+Route::post('/sightseeingmasterlist',[SightseeingMasterController::class,'index']);
+Route::post('/addupdatesightseeingmaster',[SightseeingMasterController::class,'store']);
+
+Route::post('/monumentmasterlist',[MonumentMasterController::class,'index']);
+Route::post('/addupdatemonumentmaster',[MonumentMasterController::class,'store']);
