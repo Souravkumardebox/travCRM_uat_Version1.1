@@ -10,7 +10,7 @@ class TrainMaster extends Model
     use HasFactory;
     protected $table = _TRAIN_MASTER_;
     protected $primarykey = 'id'; 
-    protected $fillable = [
+    protected $fillable =  [
         'Name',
         'ImageName',
         'ImageData',

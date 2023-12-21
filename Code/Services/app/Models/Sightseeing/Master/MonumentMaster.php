@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class MonumentMaster extends Model
 {
+   
+
     use HasFactory;
     protected $table = _MONUMENT_MASTER_;
     protected $primarykey = 'id'; 

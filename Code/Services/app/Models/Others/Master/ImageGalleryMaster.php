@@ -15,12 +15,10 @@ class ImageGalleryMaster extends Model
         'ImageData',
         'Type',
         'ParentId',
+        'Status',
         'AddedBy',
         'UpdatedBy',
-        'Status',
         'created_at',
-        'updated_at',
-       
-       
+        'updated_at',  
     ];
 }

@@ -77,7 +77,6 @@ class MonumentMasterController extends Controller
                  
                 $businessvalidation =array(
                     'Name' => 'required|unique:'._DB_.'.'._MONUMENT_MASTER_.',Name',
-                    'SetDefault' => 'required'
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation); 
@@ -113,7 +112,6 @@ class MonumentMasterController extends Controller
     
                 $businessvalidation =array(
                     'Name' => 'required',
-                    'SetDefault' => 'required'
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation);
@@ -149,16 +147,16 @@ class MonumentMasterController extends Controller
  
   
      
-    public function destroy(Request $request)
-    {
-        $brands = MonumentMaster::find($request->id);
-        $brands->delete();
+    // public function destroy(Request $request)
+    // {
+    //     $brands = MonumentMaster::find($request->id);
+    //     $brands->delete();
 
-        if ($brands) {
-            return response()->json(['result' =>'Data deleted successfully!']);
-        } else {
-            return response()->json(['result' =>'Failed to delete data.'], 500);
-        }
+    //     if ($brands) {
+    //         return response()->json(['result' =>'Data deleted successfully!']);
+    //     } else {
+    //         return response()->json(['result' =>'Failed to delete data.'], 500);
+    //     }
     
-    }
+    // }
 }

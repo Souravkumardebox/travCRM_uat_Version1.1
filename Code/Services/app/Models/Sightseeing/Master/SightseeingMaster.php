@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SightseeingMaster extends Model
 {
+   
     use HasFactory;
     protected $table = _SIGHTSEEING_MASTER_;
     protected $primarykey = 'id'; 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Sightseeing\Master;
 
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Sightseeing\Master\TrainMaster;
@@ -69,7 +70,6 @@ class TrainMasterController extends Controller
                  
                 $businessvalidation =array(
                     'Name' => 'required|unique:'._DB_.'.'._TRAIN_MASTER_.',Name',
-                    'SetDefault' => 'required'
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation); 
@@ -77,10 +77,18 @@ class TrainMasterController extends Controller
                 if($validatordata->fails()){
                     return $validatordata->errors();
                 }else{
+
+                    $ImageName = $request->input('ImageName');
+                    $base64Image = $request->input('ImageData');
+                    $ImageData = base64_decode($base64Image);
+                    $filename = uniqid() . '.png';
+                    
+                    Storage::disk('public')->put($filename, $ImageData);
+
                  $savedata = TrainMaster::create([
                     'Name' => $request->Name,
-                    'ImageName' => $request->ImageName,
-                    'ImageData' => $request->ImageData,
+                    'ImageName' => $ImageName,
+                    'ImageData' => $filename,
                     'Status' => $request->Status,
                     'AddedBy' => $request->AddedBy, 
                     'created_at' => now(),
@@ -100,7 +108,6 @@ class TrainMasterController extends Controller
     
                 $businessvalidation =array(
                     'Name' => 'required',
-                    'SetDefault' => 'required'
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation);
@@ -111,7 +118,8 @@ class TrainMasterController extends Controller
                     if ($edit) {
                         $edit->Name = $request->input('Name');
                         $edit->ImageName = $request->input('ImageName');
-                        $edit->ImageData = $request->input('ImageData');
+                        $base64Image = $request->input('ImageData');
+                        $edit->ImageData = base64_decode($base64Image);
                         $edit->Status = $request->input('Status');
                         $edit->UpdatedBy = $request->input('UpdatedBy');
                         $edit->updated_at = now();
@@ -131,16 +139,16 @@ class TrainMasterController extends Controller
  
   
      
-    public function destroy(Request $request)
-    {
-        $brands = TrainMaster::find($request->id);
-        $brands->delete();
+    // public function destroy(Request $request)
+    // {
+    //     $brands = TrainMaster::find($request->id);
+    //     $brands->delete();
 
-        if ($brands) {
-            return response()->json(['result' =>'Data deleted successfully!']);
-        } else {
-            return response()->json(['result' =>'Failed to delete data.'], 500);
-        }
+    //     if ($brands) {
+    //         return response()->json(['result' =>'Data deleted successfully!']);
+    //     } else {
+    //         return response()->json(['result' =>'Failed to delete data.'], 500);
+    //     }
     
-    }
+    // }
 }

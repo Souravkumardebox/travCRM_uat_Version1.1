@@ -21,7 +21,8 @@ class SightseeingMasterController extends Controller
         
         $posts = SightseeingMaster::when($Search, function ($query) use ($Search) {
             return $query->where('Name', 'like', '%' . $Search . '%')
-                         ->orwhere('SetDefault', 'like', '%' . $Search . '%');
+                         ->orwhere('DestinationId', 'like', '%' . $Search . '%')
+                         ->orwhere('TransferType', 'like', '%' . $Search . '%');
         })->when($Status, function ($query) use ($Status) {
              return $query->where('Status',$Status);
         })->select('*')->orderBy('Name')->get('*');
@@ -76,7 +77,6 @@ class SightseeingMasterController extends Controller
                  
                 $businessvalidation =array(
                     'Name' => 'required|unique:'._DB_.'.'._SIGHTSEEING_MASTER_.',Name',
-                    'SetDefault' => 'required'
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation); 
@@ -115,7 +115,6 @@ class SightseeingMasterController extends Controller
     
                 $businessvalidation =array(
                     'Name' => 'required',
-                    'SetDefault' => 'required'
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation);
@@ -154,16 +153,16 @@ class SightseeingMasterController extends Controller
  
   
      
-    public function destroy(Request $request)
-    {
-        $brands = SightseeingMaster::find($request->id);
-        $brands->delete();
+    // public function destroy(Request $request)
+    // {
+    //     $brands = SightseeingMaster::find($request->id);
+    //     $brands->delete();
 
-        if ($brands) {
-            return response()->json(['result' =>'Data deleted successfully!']);
-        } else {
-            return response()->json(['result' =>'Failed to delete data.'], 500);
-        }
+    //     if ($brands) {
+    //         return response()->json(['result' =>'Data deleted successfully!']);
+    //     } else {
+    //         return response()->json(['result' =>'Failed to delete data.'], 500);
+    //     }
     
-    }
+    // }
 }

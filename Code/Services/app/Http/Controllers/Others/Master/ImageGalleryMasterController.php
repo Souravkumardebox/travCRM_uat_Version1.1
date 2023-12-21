@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Others\Master;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Others\Master\ImageGalleryMaster;
+
 class ImageGalleryMasterController extends Controller
 {
     public function index(Request $request){
@@ -22,11 +24,9 @@ class ImageGalleryMasterController extends Controller
             return $query->where('Type', 'like', '%' . $Search . '%');
         })->when($Status, function ($query) use ($Status) {
              return $query->where('Status',$Status);
-        })->select('*')->orderBy('Name')->get('*');
+        })->select('*')->orderBy('Type')->get('*');
   
-        //$countryName = getName(_COUNTRY_MASTER_,3);
-        //$countryName22 = getColumnValue(_COUNTRY_MASTER_,'ShortName','AU','Name');
-        //call_logger('REQUEST2: '.$countryName22);
+       
   
         if ($posts->isNotEmpty()) {
             $arrayDataRows = [];
@@ -68,7 +68,7 @@ class ImageGalleryMasterController extends Controller
             if($id == '') {
                  
                 $businessvalidation =array(
-                    'Name' => 'required|unique:'._DB_.'.'._IMAGE_GALLERY_MASTER_.',Name',
+                    'ParentId' => 'required|unique:'._DB_.'.'._IMAGE_GALLERY_MASTER_.',Type',
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation); 
@@ -76,9 +76,25 @@ class ImageGalleryMasterController extends Controller
                 if($validatordata->fails()){
                     return $validatordata->errors();
                 }else{
+
+                    $ImageName = $request->input('ImageName');
+                    $base64Image = $request->input('ImageData');
+                    $ImageData = base64_decode($base64Image);
+                    $Type = $request->input('Type');
+                    $ParentId = $request->input('ParentId');
+                    $Status = $request->input('Status');
+                    $AddedBy = $request->input('AddedBy');
+                    $UpdatedBy = $request->input('UpdatedBy');
+                    
+                    $filename = uniqid() . '.png';
+                    
+                    // print_r($filename);die();
+                    Storage::disk('public')->put($filename, $ImageData);
+
+
                  $savedata = ImageGalleryMaster::create([
-                    'ImageName' => $request->ImageName,
-                    'ImageData' => $request->ImageData,
+                    'ImageName' => $ImageName,
+                    'ImageData' => $filename,
                     'Type' => $request->Type,
                     'ParentId' => $request->ParentId,
                     'Status' => $request->Status,
@@ -99,7 +115,7 @@ class ImageGalleryMasterController extends Controller
                 $edit = ImageGalleryMaster::find($id);
     
                 $businessvalidation =array(
-                    'Name' => 'required',
+                    'Type' => 'required',
                 );
                  
                 $validatordata = validator::make($request->all(), $businessvalidation);
@@ -109,7 +125,8 @@ class ImageGalleryMasterController extends Controller
                 }else{
                     if ($edit) {
                         $edit->ImageName = $request->input('ImageName');
-                        $edit->ImageData = $request->input('ImageData');
+                        $base64Image = $request->input('ImageData');
+                        $edit->ImageData = base64_decode($base64Image);
                         $edit->Type = $request->input('Type');
                         $edit->ParentId = $request->input('ParentId');
                         $edit->Status = $request->input('Status');
@@ -128,5 +145,4 @@ class ImageGalleryMasterController extends Controller
             return response()->json(['Status' => -1, 'Message' => 'Exception Error Found']);
         }
     }
-  
 }
